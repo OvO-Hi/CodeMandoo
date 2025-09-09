@@ -1,12 +1,12 @@
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/recorddb
-    username: postgres
+    username: recorduser
     password: recordpass
     driver-class-name: org.postgresql.Driver
 
     # EC2 보관용
-    # url: jdbc:postgresql://3.34.179.255:5432/recorddb
+    # url: jdbc:postgresql://localhost:5432/recorddb
     # username: recorduser
     # password: recordpass
     # driver-class-name: org.postgresql.Driver
@@ -32,5 +32,4 @@ cloud:
       bucket: recording-bucket
 
 openai:
-  api-key: ${OPENAI_API_KEY}
-$
+  api-key: "${OPENAI_API_KEY}"

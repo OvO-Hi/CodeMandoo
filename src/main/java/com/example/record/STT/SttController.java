@@ -3,6 +3,7 @@ package com.example.record.STT;
 import com.example.record.DB.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -60,20 +61,33 @@ public class SttController {
     @PostMapping("/gpt")
     public ResponseEntity<GptResponse> summarize(@RequestParam Long id,
                                                  @AuthenticationPrincipal User user) {
-        if (user == null) return ResponseEntity.status(401).build();
+        // 401: 제네릭을 GptResponse로 유지
+        if (user == null) {
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body((GptResponse) null);
+            // 또는 .<GptResponse>body(null)
+        }
 
         return transcriptionRepository.findById(id)
                 .map(t -> {
+                    // 403: 여기서도 제네릭 유지
                     if (!t.getUser().getId().equals(user.getId())) {
-                        return ResponseEntity.status(403).build();
+                        return ResponseEntity
+                                .status(HttpStatus.FORBIDDEN)
+                                .body((GptResponse) null);
                     }
                     String summary = sttGptService.summarize(t.getResultText());
                     t.setSummary(summary);
                     transcriptionRepository.save(t);
                     return ResponseEntity.ok(new GptResponse(summary));
                 })
-                .orElseGet(() -> ResponseEntity.status(404).build());
+                // 404: 이미 제네릭 명시되어 OK
+                .orElseGet(() -> ResponseEntity
+                        .status(HttpStatus.NOT_FOUND)
+                        .<GptResponse>body(null));
     }
+
 
     // [3] 내 기록 조회
     @GetMapping("/list")

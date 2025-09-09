@@ -51,7 +51,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET,  "/stt/gpt").permitAll()
                         .requestMatchers("/api/image/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .anyRequest().authenticated()
+                                .anyRequest().permitAll()
+                        //.anyRequest().authenticated() << 배포시에는 다시 이걸로 돌릴것..
                 )
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(authEntryPoint()));
 
