@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>프롬프트&이미지 생성 테스트</title>
+    <link rel="stylesheet" href="demo.css">
+</head>
+<body>
+
+<main class="container">
+    <h1 class="page-title">공연 프롬프트 생성</h1>
+
+    <section class="prompt-container">
+        <form id="promptForm" class="prompt-form">
+
+            <div class="form-group">
+                <label for="title">공연 제목</label>
+                <input type="text" id="title" name="title" required>
+            </div>
+
+            <div class="form-group">
+                <label for="genre">장르</label>
+                <select id="genre" name="genre" required>
+                    <option value="">--선택--</option>
+                    <option value="뮤지컬">뮤지컬</option>
+                    <option value="밴드">밴드</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="location">공연 장소</label>
+                <input type="text" id="location" name="location" required>
+            </div>
+
+            <div class="form-group">
+                <label for="date">공연 날짜</label>
+                <input type="date" id="date" name="date" required>
+            </div>
+
+            <div class="form-group">
+                <label for="cast">출연진 (쉼표로 구분)</label>
+                <input type="text" id="cast" name="cast" required>
+            </div>
+
+            <div class="form-group">
+                <label for="review">관람 후기</label>
+                <textarea id="review" name="review" rows="6" required></textarea>
+            </div>
+        </form>
+
+        <button type="button" id="submitButton" class="prompt-form__button">프롬프트 생성 요청</button>
+
+    </section>
+</main>
+
+<!-- 로딩 화면 -->
+<div id="loadingScreen" class="loading-screen" style="display: none;">
+    30초만 기다려주세요... ⏳
+</div>
+
+<script src="main.js"></script>
+</body>
+</html>

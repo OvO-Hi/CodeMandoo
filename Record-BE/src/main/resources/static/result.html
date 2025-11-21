@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>응답 결과</title>
+    <link rel="stylesheet" href="result.css" />
+</head>
+<body>
+
+<!-- 🔧 로딩 화면 추가 -->
+<div id="loadingScreen" class="loading-screen">
+    결과 불러오는 중입니다... ⏳
+</div>
+
+<!-- 실제 결과 콘텐츠 -->
+<main class="container" style="display: none;">
+    <h2 class="page-title">응답 결과</h2>
+
+    <div class="prompt-result">
+        <p><strong>생성된 프롬프트:</strong></p>
+        <pre id="promptText" class="prompt-result__text"></pre>
+
+        <p><strong>생성된 이미지:</strong></p>
+        <img id="resultImage" class="prompt-result__image" alt="생성된 이미지" />
+
+        <button id="goBackButton" class="go-back-button">처음으로 돌아가기</button>
+    </div>
+</main>
+
+<script src="result.js"></script>
+</body>
+</html>

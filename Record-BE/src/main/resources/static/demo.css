@@ -1,0 +1,109 @@
+/* 전체 페이지 기본 설정 */
+html, body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    height: 100%;
+    font-family: sans-serif;
+    overflow-x: hidden; /* 가로 스크롤 방지 */
+}
+
+/* 중앙 정렬 + 스크롤 가능하게 */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    min-height: 100vh;       /* 스크롤 허용 */
+    padding: 40px 16px;      /* 상단 여백 추가 */
+    gap: 12px;
+    box-sizing: border-box;
+}
+
+/* 전체 페이지를 수직 중앙 정렬 */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    height: 100vh; /* 화면 높이만큼 차지 */
+    gap: 12px;     /* 제목과 폼 사이 간격 */
+    box-sizing: border-box;
+}
+
+.prompt-container {
+    position: static;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 16px;
+    padding: 20px;
+    width: 400px;
+    box-sizing: border-box;
+    gap: 16px;
+}
+
+
+.page-title {
+    text-align: center;
+    font-size: 32px;
+}
+
+/* form 자체는 내부 입력 요소 정렬만 책임짐 */
+.prompt-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    font-size: 0.875rem;
+}
+
+/* 라벨+입력 요소 묶음 */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+/* input, select, textarea */
+.form-group input,
+.form-group select,
+.form-group textarea {
+    padding: 6px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 0.875rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* 프롬프트 생성 요청 버튼 */
+.prompt-form__button {
+    padding: 8px 16px;
+    font-size: 0.875rem;
+    border-radius: 12px;
+    background-color: #333;
+    color: white;
+    cursor: pointer;
+    width: 100%;
+}
+
+.loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+
+    width: 100vw;
+    height: 100vh;
+
+    background-color: rgba(255, 255, 255, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+    color: #333;
+}

@@ -1,0 +1,61 @@
+# Resolve react_native_pods.rb with node to allow for hoisting
+require Pod::Executable.execute_command('node', ['-p',
+  'require.resolve(
+    "react-native/scripts/react_native_pods.rb",
+    {paths: [process.argv[1]]},
+  )', __dir__]).strip
+
+# iOS 16 이상이 필요한 서드파티 라이브러리(nitro-modules 등)를 위해
+# 최소 지원 버전을 16으로 고정합니다.
+min_ios_version_supported = '16.0'
+platform :ios, min_ios_version_supported
+prepare_react_native_project!
+
+linkage = ENV['USE_FRAMEWORKS']
+if linkage != nil
+  Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green
+  use_frameworks! :linkage => linkage.to_sym
+end
+
+target 'TicketBookApp' do
+  config = use_native_modules!
+
+  use_react_native!(
+    :path => config[:reactNativePath],
+    # An absolute path to your application root.
+    :app_path => "#{Pod::Config.instance.installation_root}/..",
+    # Enable New Architecture (Fabric + TurboModules)
+    # New Architecture는 Fabric(UI 렌더링)과 TurboModules(네이티브 모듈)로 구성되어 있습니다.
+    :fabric_enabled => true,
+    :new_arch_enabled => true
+  )
+
+  post_install do |installer|
+    # 모든 Pod 타깃의 iOS 최소 버전을 16.0으로 통일합니다.
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '16.0'
+        
+        # glog 헤더 검색 경로 문제 해결
+        if target.name == 'glog'
+          config.build_settings['HEADER_SEARCH_PATHS'] ||= ['$(inherited)']
+          config.build_settings['HEADER_SEARCH_PATHS'] << '$(PODS_ROOT)/glog/src'
+        end
+      end
+    end
+
+    # https://github.com/facebook/react-native/blob/main/packages/react-native/scripts/react_native_pods.rb#L197-L202
+    # react_native_post_install 호출 중 에러가 발생해도 계속 진행하도록 처리
+    begin
+      react_native_post_install(
+        installer,
+        config[:reactNativePath],
+        :mac_catalyst_enabled => false,
+        # :ccache_enabled => true
+      )
+    rescue => e
+      Pod::UI.warn "react_native_post_install 실행 중 에러 발생: #{e.message}"
+      Pod::UI.warn "계속 진행합니다..."
+    end
+  end
+end

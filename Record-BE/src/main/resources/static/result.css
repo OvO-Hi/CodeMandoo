@@ -1,0 +1,116 @@
+/* 전체 페이지 기본 설정 */
+html, body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    height: 100%;
+    font-family: sans-serif;
+    overflow-x: hidden; /* 가로 스크롤 방지 */
+}
+
+/* 중앙 정렬 + 스크롤 가능하게 */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    min-height: 100vh;       /* 스크롤 허용 */
+    padding: 40px 16px;      /* 상단 여백 추가 */
+    gap: 12px;
+    box-sizing: border-box;
+}
+
+/* 제목 스타일 */
+.page-title {
+    text-align: center;
+    font-size: 32px;
+    margin: 0;
+}
+
+/* 결과 카드 박스 */
+.prompt-result {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 16px;
+    padding: 20px;
+    width: 400px;
+    box-sizing: border-box;
+    gap: 16px;
+}
+
+/* 생성된 텍스트 */
+.prompt-result__text {
+    background-color: #f3f3f3;
+    padding: 12px;
+    border-radius: 8px;
+    width: 100%;
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-size: 0.875rem;
+}
+
+/* 생성된 이미지 */
+.prompt-result__image {
+    width: 100%;
+    border-radius: 8px;
+    object-fit: contain;
+}
+
+/* 로딩 화면 */
+.loading-screen {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+.go-back-button {
+    padding: 8px 16px;
+    font-size: 0.875rem;
+    border-radius: 8px;
+    background-color: #555;
+    color: white;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.2s;
+}
+
+.go-back-button:hover {
+    background-color: #222;
+}
+
+.prompt-result__text {
+    background-color: #f3f3f3;
+    padding: 12px;
+    border-radius: 8px;
+    width: 100%;
+    max-height: 200px;              /* 너무 길 경우 제한 */
+    overflow-y: auto;               /* 스크롤 표시 */
+    white-space: pre-wrap;          /* 줄바꿈 허용 */
+    word-break: break-word;         /* 단어가 길어도 줄바꿈 */
+    font-size: 0.875rem;
+    box-sizing: border-box;
+}
+
+.loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(255, 255, 255, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+    color: #333;
+    z-index: 9999;
+}
+

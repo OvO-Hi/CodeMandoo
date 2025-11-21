@@ -1,0 +1,99 @@
+-- 1. users
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    email VARCHAR(30) UNIQUE NOT NULL,
+    password VARCHAR(30) NOT NULL,
+    nickname VARCHAR(30) NOT NULL,
+    role VARCHAR(10) DEFAULT 'USER',
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP DEFAULT NOW()
+);
+
+-- 2. performances
+CREATE TABLE performances (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(30) NOT NULL,
+    theater VARCHAR(30),
+    poster_url VARCHAR(400),
+    genre VARCHAR(10)
+);
+
+-- 3. tickets
+CREATE TABLE tickets (
+    id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES users(id),
+    performance_id INT REFERENCES performances(id),
+    image_url VARCHAR(400) NOT NULL,
+    ocr_text TEXT,
+    review_text TEXT,
+    is_public BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP DEFAULT NOW()
+);
+
+-- 4. reviews
+CREATE TABLE reviews (
+    id SERIAL PRIMARY KEY,
+    ticket_id INT UNIQUE REFERENCES tickets(id),
+    summary TEXT NOT NULL,
+    keywords TEXT,
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP DEFAULT NOW()
+);
+
+-- 5. questions_templates
+CREATE TABLE questions_templates (
+    id SERIAL PRIMARY KEY,
+    template_text TEXT NOT NULL,
+    category VARCHAR(50),
+    genre VARCHAR(50)
+);
+
+-- 6. review_questions
+CREATE TABLE review_questions (
+    id SERIAL PRIMARY KEY,
+    review_id INT NOT NULL REFERENCES reviews(id),
+    template_id INT NOT NULL REFERENCES questions_templates(id),
+    display_order INT NOT NULL,
+    custom_text TEXT
+);
+
+-- 7. generated_image_url
+CREATE TABLE generated_image_url (
+    id SERIAL PRIMARY KEY,
+    review_id INT REFERENCES reviews(id),
+    image_url TEXT NOT NULL,
+    style VARCHAR(30),
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- 8. musical_db
+CREATE TABLE musical_db (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(50) NOT NULL,
+    summary TEXT,
+    background VARCHAR(50),
+    main_character_count INT,
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- 9. musical_characters
+CREATE TABLE musical_characters (
+    id SERIAL PRIMARY KEY,
+    musical_id INT REFERENCES musical_db(id),
+    name VARCHAR(50),
+    gender VARCHAR(10),
+    age VARCHAR,
+    occupation VARCHAR(50),
+    description TEXT
+);
+
+-- 10. band_db
+CREATE TABLE band_db (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(50) NOT NULL,
+    summary TEXT,
+    background VARCHAR(50),
+    main_member_count INT,
+    created_at TIMESTAMP DEFAULT NOW()
+);

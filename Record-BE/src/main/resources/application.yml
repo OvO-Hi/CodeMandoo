@@ -1,0 +1,99 @@
+spring:
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}  # 기본 프로필을 dev로 설정
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/recorddb}
+    username: ${DB_USER:recorduser}
+    password: ${DB_PASSWORD:recordpass}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: ${JPA_DDL_AUTO:update}
+    show-sql: ${JPA_SHOW_SQL:true}
+    properties:
+      hibernate:
+        format_sql: true
+    open-in-view: ${JPA_OPEN_IN_VIEW:true}
+
+  servlet:
+    multipart:
+      max-file-size: 200MB
+      max-request-size: 200MB
+
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+    deserialization:
+      fail-on-unknown-properties: false
+
+  # 정적 리소스 설정 (로컬 uploads 폴더 서빙)
+  web:
+    resources:
+      static-locations: classpath:/static/, file:./uploads/
+
+# spring 바깥(루트) 레벨 설정
+app:
+  base-url: https://record.example.com
+  mail:
+    from: no-reply@record.example.com
+
+  # 로컬 프로필 이미지 업로드 설정
+  upload:
+    profile-image-dir: uploads/profile-images          # 실제 저장 폴더 (프로젝트 루트 기준)
+    profile-image-url-prefix: /uploads/profile-images  # 클라이언트에 내려줄 URL prefix
+
+openai:
+  api:
+    key: ${OPENAI_API_KEY}
+  url:
+    transcription: https://api.openai.com/v1/audio/transcriptions
+    chat: https://api.openai.com/v1/chat/completions
+    image: https://api.openai.com/v1/images/generations
+  model:
+    transcription: whisper-1
+    chat: gpt-4o-mini
+    image: gpt-image-1
+  limits:
+    whisperMaxFileMB: ${OPENAI_WHISPER_MAX_MB:25}
+    imagePromptMaxChars: ${OPENAI_IMAGE_PROMPT_MAX:900}
+
+stt:
+  provider: ${STT_PROVIDER:openai}
+  language: ${STT_LANGUAGE:ko}
+  ffmpeg:
+    path: ${FFMPEG_PATH:ffmpeg}
+
+cloud:
+  aws:
+    credentials:
+      access-key: ${AWS_ACCESS_KEY_ID:}
+      secret-key: ${AWS_SECRET_ACCESS_KEY:}
+    region:
+      static: ${AWS_REGION:ap-northeast-2}
+    s3:
+      bucket: ${S3_BUCKET:recording-bucket}
+
+jwt:
+  secret: ${JWT_SECRET:change-me-32bytes-minimum-aaaaaaaaaaaaaaa}
+  expiration-ms: ${JWT_EXPIRATION_MS:3600000}
+
+logging:
+  level:
+    root: ${LOG_ROOT_LEVEL:INFO}
+    org.springframework.web: ${LOG_WEB_LEVEL:INFO}
+    org.hibernate.SQL: ${LOG_HIBERNATE_SQL:INFO}
+    org.hibernate.type.descriptor.sql.BasicBinder: ${LOG_HIBERNATE_BINDER:WARN}

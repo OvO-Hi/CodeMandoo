@@ -1,0 +1,91 @@
+
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.2.5'
+	id 'io.spring.dependency-management' version '1.1.5'
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+	}
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+	all {
+		exclude group: 'commons-logging', module: 'commons-logging'
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0' //Swagger
+	// --- Spring starters ---
+	implementation 'org.springframework.boot:spring-boot-starter-web'            // MVC (Tomcat)
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'        // WebClient (필요 시만 유지)
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-security'       // PasswordEncoder/JWT 보안 필수
+	implementation 'org.springframework.boot:spring-boot-starter-validation'     // @Valid
+	implementation 'org.springframework.boot:spring-boot-starter-mail'           // JavaMailSender
+	
+	// --- Netty 네이티브 DNS (MacOS DNS 해석 개선) ---
+	// MacOS에서 WebClient의 DNS 해석 성능과 안정성을 향상시키기 위한 네이티브 라이브러리
+	// 이 의존성이 없으면 "Unable to load io.netty.resolver.dns.macos.MacOSDnsServerAddressStreamProvider" 경고가 발생하고
+	// 시스템 기본 DNS로 폴백되지만, 네이티브 라이브러리를 사용하면 더 빠르고 안정적입니다.
+	runtimeOnly 'io.netty:netty-resolver-dns-native-macos:4.1.104.Final:osx-aarch_64'
+
+	// --- DB ---
+	runtimeOnly 'org.postgresql:postgresql:42.6.0'
+
+	// --- Google Cloud (OCR/STT) ---
+	implementation 'com.google.cloud:google-cloud-vision:3.36.0'
+	implementation 'com.google.cloud:google-cloud-speech:4.2.0'
+
+	// --- AWS SDK v2 ---
+	implementation platform('software.amazon.awssdk:bom:2.25.11')
+	implementation 'software.amazon.awssdk:s3'
+	implementation 'software.amazon.awssdk:sts'
+
+	// --- JWT ---
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+	runtimeOnly   'io.jsonwebtoken:jjwt-impl:0.11.5'
+	runtimeOnly   'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
+	// --- Lombok ---
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+
+	// --- @ConfigurationProperties metadata (선택) ---
+	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+
+	// --- Dev ---
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+	// --- Test ---
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+tasks.named('bootRun') {
+	environment "OPENAI_API_KEY", System.getenv("OPENAI_API_KEY")
+}
+
+tasks.withType(JavaCompile).configureEach {
+	options.encoding = 'UTF-8'
+	options.compilerArgs << '-parameters'
+}

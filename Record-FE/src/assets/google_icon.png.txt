@@ -1,0 +1,7 @@
+Note: This is a placeholder file. 
+Please replace this with the actual Google icon image (google_icon.png).
+You can download the official Google "G" logo from:
+https://developers.google.com/identity/branding-guidelines
+
+For now, the app will show an error for the missing image.
+You can temporarily use any square image as a placeholder.
